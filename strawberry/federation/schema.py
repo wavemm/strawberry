@@ -15,6 +15,7 @@ from strawberry.annotation import StrawberryAnnotation
 from strawberry.printer import print_schema
 from strawberry.schema import Schema as BaseSchema
 from strawberry.types.base import (
+    Resolver,
     StrawberryContainer,
     StrawberryObjectDefinition,
     WithStrawberryObjectDefinition,
@@ -110,7 +111,7 @@ class Schema(BaseSchema):
 
         @strawberry.type(name="_Service")
         class Service:
-            sdl: str = strawberry.field(
+            sdl: Resolver[str] = strawberry.field(
                 resolver=lambda: print_schema(self),
             )
 

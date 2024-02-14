@@ -7,9 +7,11 @@ from typing import (
     Any,
     Callable,
     ClassVar,
+    Generic,
     Optional,
     TypeVar,
     Union,
+    final,
     overload,
 )
 from typing_extensions import Literal, Protocol, Self, deprecated
@@ -439,6 +441,51 @@ class StrawberryObjectDefinition(StrawberryType):
             return False
 
         return any(isinstance(directive, OneOf) for directive in self.directives)
+
+
+T_co = TypeVar("T_co", covariant=True)
+
+
+@final
+class Resolver(ABC, Generic[T_co]):  # type: ignore[misc]
+    @abstractmethod
+    def __do_not_instantiate_this(self) -> None:
+        ...
+
+
+class ResolverFakeStrawberryObjectDefinition(StrawberryObjectDefinition):
+    def __init__(self) -> None:
+        super().__init__(
+            name=Resolver.__name__,
+            is_input=False,
+            is_interface=False,
+            origin=Resolver,
+            description=None,
+            interfaces=[],
+            extend=False,
+            directives=None,
+            is_type_of=None,
+            resolve_type=None,
+            fields=[],
+            concrete_of=None,
+            type_var_map={},
+        )
+
+    def resolve_generic(self, wrapped_cls: type[Any]) -> type[Any]:
+        from strawberry.annotation import StrawberryAnnotation
+
+        passed_types = wrapped_cls.__args__
+        assert (
+            len(passed_types) == 1
+        ), f"Resolver should be generic over one arg: {passed_types}"
+        return StrawberryAnnotation(passed_types[0]).resolve()  # type: ignore[return-value]
+
+    @property
+    def is_graphql_generic(self) -> bool:
+        return True
+
+
+Resolver.__strawberry_definition__ = ResolverFakeStrawberryObjectDefinition()  # type: ignore[attr-defined]
 
 
 # TODO: remove when deprecating _type_definition

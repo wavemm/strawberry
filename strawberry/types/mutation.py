@@ -26,6 +26,7 @@ if TYPE_CHECKING:
 
     from strawberry.extensions.field_extension import FieldExtension
     from strawberry.permission import BasePermission
+    from strawberry.types.base import Resolver
 
 # NOTE: we are separating the sync and async resolvers because using both
 # in the same function will cause mypy to raise an error. Not sure if it is a bug
@@ -46,7 +47,7 @@ def mutation(
     directives: Optional[Sequence[object]] = (),
     extensions: Optional[list[FieldExtension]] = None,
     graphql_type: Optional[Any] = None,
-) -> T: ...
+) -> Resolver[T]: ...
 
 
 @overload
@@ -64,7 +65,7 @@ def mutation(
     directives: Optional[Sequence[object]] = (),
     extensions: Optional[list[FieldExtension]] = None,
     graphql_type: Optional[Any] = None,
-) -> T: ...
+) -> Resolver[T]: ...
 
 
 @overload

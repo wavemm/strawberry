@@ -20,6 +20,7 @@ if TYPE_CHECKING:
 
     from strawberry.extensions.field_extension import FieldExtension
     from strawberry.permission import BasePermission
+    from strawberry.types.base import Resolver
     from strawberry.types.field import (
         _RESOLVER_TYPE,
         _RESOLVER_TYPE_ASYNC,
@@ -61,7 +62,7 @@ def field(
     directives: Optional[Sequence[object]] = (),
     extensions: Optional[list[FieldExtension]] = None,
     graphql_type: Optional[Any] = None,
-) -> T: ...
+) -> Resolver[T]: ...
 
 
 @overload
@@ -90,7 +91,7 @@ def field(
     directives: Optional[Sequence[object]] = (),
     extensions: Optional[list[FieldExtension]] = None,
     graphql_type: Optional[Any] = None,
-) -> T: ...
+) -> Resolver[T]: ...
 
 
 @overload

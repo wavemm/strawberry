@@ -13,6 +13,7 @@ from .schema import Schema
 from .schema_directive import schema_directive
 from .types.arguments import argument
 from .types.auto import auto
+from .types.base import Resolver
 from .types.cast import cast
 from .types.enum import enum, enum_value
 from .types.field import field
@@ -34,6 +35,7 @@ __all__ = [
     "Parent",
     "Private",
     "Schema",
+    "Resolver",
     "argument",
     "asdict",
     "auto",
